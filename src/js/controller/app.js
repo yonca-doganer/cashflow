@@ -5,6 +5,7 @@ import { renderForm } from "../view/form.js";
 import { renderTable } from "../view/tablo.js";
 import { renderChart } from "../view/grafik.js";
 import { renderCards } from "../view/kartlar.js";
+import { renderHelpModal } from "../view/helpView.js";
 import { showBanner, showModal } from "../view/ui.js";
 import { exportToCSV } from "../utils/export.js";
 
@@ -25,6 +26,12 @@ const init = () => {
   updateScenarioList();
   updateUI();
   setupEventListeners();
+
+  // Show help on first visit
+  if (!localStorage.getItem("help_shown")) {
+    renderHelpModal(document.body);
+    localStorage.setItem("help_shown", "true");
+  }
 };
 
 const updateUI = () => {
@@ -259,6 +266,11 @@ const setupEventListeners = () => {
 
     exportToCSV(exportData, `nakit_akisi_${currentScenarioName}`);
     showBanner("Excel (CSV) dosyası indirildi.");
+  });
+  
+  // Help
+  document.getElementById("btn-help").addEventListener("click", () => {
+    renderHelpModal(document.body);
   });
 };
 
